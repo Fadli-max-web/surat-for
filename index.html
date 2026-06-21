@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Seseorang yang Spesial</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #FFD6E7 0%, #D6EFFF 100%);
+        }
+        
+        .font-romantic {
+            font-family: 'Dancing Script', cursive;
+        }
+        /* Glassmorphism */
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        /* Floating Hearts Animation */
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1);
+                opacity: 0;
+            }
+        }
+        
+        .heart {
+            position: fixed;
+            bottom: 0;
+            color: rgba(255, 182, 193, 0.7);
+            font-size: 20px;
+            pointer-events: none;
+            animation: floatUp 6s linear infinite;
+        }
+    </style>
+</head>
+
+<body class="text-gray-700 overflow-x-hidden">
+
+    <div class="fixed top-4 right-4 z-50">
+        <button id="musicBtn" class="glass-card w-12 h-12 rounded-full flex items-center justify-center text-pink-500 shadow-md hover:scale-110 transition-transform">
+            <i id="musicIcon" class="fas fa-music animate-pulse"></i>
+        </button>
+        <audio id="bgMusic" loop></audio>
+    </div>
+
+    <section id="landing" class="h-screen w-full flex flex-col items-center justify-center text-center p-4 relative z-10">
+        <div class="glass-card p-8 md:p-12 rounded-3xl shadow-xl max-w-lg w-full" data-aos="zoom-in" data-aos-duration="1500">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">Halo, Selamat Datang</h1>
+            <div class="text-4xl md:text-5xl font-romantic font-bold text-pink-600 min-h-[60px] flex items-center justify-center" id="typing-text"></div>
+            <p class="mt-4 text-sm md:text-base text-gray-600">Ada sebuah pesan kecil yang ingin aku sampaikan kepadamu...</p>
+            <button onclick="bukaPesan()" class="mt-8 px-8 py-3 bg-white text-pink-500 font-semibold rounded-full shadow-lg hover:bg-pink-500 hover:text-white hover:shadow-pink-200 transition-all duration-300 transform hover:-translate-y-1">
+                Buka Pesan <i class="fas fa-heart ml-2"></i>
+            </button>
+        </div>
+    </section>
+
+    <main id="main-content" class="hidden max-w-4xl mx-auto px-4 pb-24 space-y-24">
+
+        <section id="pesan" class="pt-12" data-aos="fade-up">
+            <div class="glass-card p-8 md:p-12 rounded-3xl shadow-lg text-center relative overflow-hidden">
+                <div class="absolute -top-6 -left-6 text-pink-200 text-9xl opacity-50 font-romantic">“</div>
+                <h2 class="text-3xl font-romantic font-bold text-pink-600 mb-6">Surat Untukmu</h2>
+                <p id="teks-pesan" class="leading-relaxed text-base md:text-lg whitespace-pre-line text-gray-600 font-medium">
+                </p>
+                <div class="absolute -bottom-16 -right-6 text-pink-200 text-9xl opacity-50 font-romantic">”</div>
+            </div>
+        </section>
+
+        <section id="timeline" data-aos="fade-up">
+            <h2 class="text-3xl font-romantic font-bold text-center text-pink-600 mb-10">Perjalanan Kita</h2>
+            <div class="relative border-l-2 border-pink-300 ml-4 md:ml-32 space-y-8" id="timeline-container">
+            </div>
+        </section>
+
+        <section id="galeri" data-aos="fade-up">
+            <h2 class="text-3xl font-romantic font-bold text-center text-pink-600 mb-8">Galeri Kenangan</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="galeri-container">
+            </div>
+        </section>
+
+        <section id="alasan" data-aos="fade-up">
+            <h2 class="text-3xl font-romantic font-bold text-center text-pink-600 mb-8">Kenapa Kamu Begitu Spesial?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="alasan-container">
+            </div>
+        </section>
+
+        <section id="penutup" class="text-center py-12" data-aos="zoom-in">
+            <div class="glass-card p-8 md:p-12 rounded-3xl shadow-lg">
+                <h2 class="text-4xl font-romantic font-bold text-pink-600 mb-4" id="judul-penutup"></h2>
+                <p class="text-gray-600 mb-8 max-w-md mx-auto" id="teks-penutup"></p>
+                <button onclick="ulangi()" class="px-6 py-2 border-2 border-pink-400 text-pink-500 rounded-full hover:bg-pink-400 hover:text-white transition-colors duration-300">
+                    <i class="fas fa-redo mr-2"></i> Ulangi dari Awal
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="photoModal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div class="relative max-w-3xl w-full bg-white p-2 rounded-2xl shadow-2xl transform scale-95 transition-transform duration-300">
+            <button onclick="closeModal()" class="absolute -top-12 right-0 text-white text-3xl hover:text-pink-300">&times;</button>
+            <img id="modalImg" src="" alt="Kenangan" class="w-full h-auto max-h-[80vh] object-contain rounded-xl">
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // ==========================================
+        // CONFIGURATION DATA (Ubah isi di sini)
+        // ==========================================
+        const WEBSITE_DATA = {
+            namaSpesial: "Nama Dia yang Spesial ❤️",
+            musikUrl: "sempurna.mp3", // Ganti dengan link mp3 lagu favorit kalian
+            pesanSpesial: "Hari-hari berjalan terasa jauh lebih indah sejak kehadiranmu. Terima kasih sudah selalu menjadi alasan di balik senyumanku, mendengarkan ceritaku, dan menjadi tempat terbaik untuk pulang.\n\nSurat ini dibuat khusus untuk mengingatkanmu betapa berharganya dirimu, tidak hanya bagiku, tapi bagi dunia yang beruntung memilikimu.",
+            timeline: [{
+                tanggal: "12 Januari 2024",
+                ikon: "fa-comments",
+                judul: "Pertama Kali Kenal",
+                deskripsi: "Awal mula chat kecil yang tidak disangka akan menjadi obrolan panjang setiap hari."
+            }, {
+                tanggal: "14 Februari 2024",
+                ikon: "fa-coffee",
+                judul: "Pertemuan Pertama",
+                deskripsi: "Gugup, canggung, tapi itu adalah hari paling bahagia bisa melihat senyummu langsung."
+            }, {
+                tanggal: "01 Januari 2025",
+                ikon: "fa-star",
+                judul: "Melewati Tahun Baru",
+                deskripsi: "Membuat harapan bersama untuk tahun-tahun yang akan datang."
+            }],
+            galeri: [
+                "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500", // Ganti dengan URL foto kalian
+                "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500",
+                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500"
+            ],
+            alasan: [{
+                judul: "Senyumanmu",
+                deskripsi: "Senyummu punya kekuatan magis untuk mencerahkan hari yang paling mendung sekalipun."
+            }, {
+                judul: "Pendengar yang Baik",
+                deskripsi: "Kamu selalu tahu kapan harus berbicara dan kapan cukup mendengarkan dengan penuh ketulusan."
+            }, {
+                judul: "Hatimu yang Tulus",
+                deskripsi: "Cara kamu peduli pada hal-hal kecil membuatku selalu kagum kepadamu setiap harinya."
+            }],
+            penutup: {
+                judul: "Terima Kasih, Kamu",
+                teks: "Semoga harimu selalu dipenuhi kebahagiaan. Ingat ya, kamu berharga dan selalu didukung di sini!"
+            }
+        };
+
+        // ==========================================
+        // LOGIKAL WEBSITE (Jangan diubah jika tidak perlu)
+        // ==========================================
+        AOS.init({
+            once: true
+        });
+
+        // Efek Mengetik
+        let indexText = 0;
+
+        function typingEffect() {
+            const text = WEBSITE_DATA.namaSpesial;
+            if (indexText < text.length) {
+                document.getElementById("typing-text").innerHTML += text.charAt(indexText);
+                indexText++;
+                setTimeout(typingEffect, 150);
+            }
+        }
+        window.onload = typingEffect;
+
+        // Efek Efek Floating Hearts
+        function createHeart() {
+            const heart = document.createElement("i");
+            heart.classList.add("fas", "fa-heart", "heart");
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+            heart.style.fontSize = Math.random() * 15 + 10 + "px";
+            document.body.appendChild(heart);
+            setTimeout(() => {
+                heart.remove();
+            }, 6000);
+        }
+        setInterval(createHeart, 400);
+
+        // Membuka Pesan Utama
+        function bukaPesan() {
+            document.getElementById("bgMusic").src = WEBSITE_DATA.musikUrl;
+            document.getElementById("bgMusic").play().catch(e => console.log("Audio play diblokir oleh browser"));
+
+            const mainContent = document.getElementById("main-content");
+            mainContent.classList.remove("hidden");
+
+            // Render Data Dinamis
+            document.getElementById("teks-pesan").innerText = WEBSITE_DATA.pesanSpesial;
+
+            // Render Timeline
+            const timelineBox = document.getElementById("timeline-container");
+            timelineBox.innerHTML = WEBSITE_DATA.timeline.map(item => `
+                <div class="relative pl-8 md:pl-10" data-aos="fade-left">
+                    <div class="absolute -left-[17px] top-0 bg-white text-pink-500 border-2 border-pink-300 w-8 h-8 rounded-full flex items-center justify-center shadow-sm">
+                        <i class="fas ${item.ikon} text-xs"></i>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                        <span class="text-xs font-bold text-pink-500 uppercase tracking-wider">${item.tanggal}</span>
+                        <h3 class="text-lg font-bold text-gray-800 mt-1">${item.judul}</h3>
+                        <p class="text-sm text-gray-600 mt-1">${item.deskripsi}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Galeri
+            const galeriBox = document.getElementById("galeri-container");
+            galeriBox.innerHTML = WEBSITE_DATA.galeri.map(imgUrl => `
+                <div class="overflow-hidden rounded-2xl shadow-sm cursor-pointer group relative" onclick="openModal('${imgUrl}')">
+                    <img src="${imgUrl}" alt="Kenangan" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-pink-400/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <i class="fas fa-search-plus text-white text-2xl"></i>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Alasan
+            const alasanBox = document.getElementById("alasan-container");
+            alasanBox.innerHTML = WEBSITE_DATA.alasan.map(item => `
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-pink-400 shadow-sm hover:transform hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="font-bold text-lg text-gray-800 flex items-center"><i class="fas fa-check-circle text-pink-400 mr-2"></i> ${item.judul}</h3>
+                    <p class="text-sm text-gray-600 mt-2 leading-relaxed">${item.deskripsi}</p>
+                </div>
+            `).join('');
+
+            // Render Penutup
+            document.getElementById("judul-penutup").innerText = WEBSITE_DATA.penutup.judul;
+            document.getElementById("teks-penutup").innerText = WEBSITE_DATA.penutup.teks;
+
+            // Scroll Halus ke Konten Utama
+            setTimeout(() => {
+                mainContent.scrollIntoView({
+                    behavior: 'smooth'
+                });
+                AOS.refresh();
+            }, 100);
+        }
+
+        // Kontrol Musik
+        const musicBtn = document.getElementById("musicBtn");
+        const audio = document.getElementById("bgMusic");
+        const musicIcon = document.getElementById("musicIcon");
+
+        musicBtn.addEventListener("click", () => {
+            if (audio.paused) {
+                audio.play();
+                musicIcon.className = "fas fa-music animate-pulse";
+            } else {
+                audio.pause();
+                musicIcon.className = "fas fa-pause";
+            }
+        });
+
+        // Kontrol Modal Foto
+        function openModal(url) {
+            const modal = document.getElementById("photoModal");
+            const modalImg = document.getElementById("modalImg");
+            modalImg.src = url;
+            modal.classList.remove("hidden");
+            setTimeout(() => {
+                modal.classList.remove("opacity-0");
+                modal.querySelector('div').classList.remove("scale-95");
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("photoModal");
+            modal.classList.add("opacity-0");
+            modal.querySelector('div').classList.add("scale-95");
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 300);
+        }
+
+        // Mengulangi dari Awal
+        function ulangi() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            setTimeout(() => {
+                location.reload();
+            }, 800);
+        }
+    </script>
+</body>
+
+</html>
